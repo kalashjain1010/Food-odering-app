@@ -3,20 +3,20 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
 
-function RegisterPage() {
+function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [creatingUser, setCreatingUser] = useState(false);
+  const [LoginInProgress, SetLoginInProgress] = useState(false);
   const [userCreated, setUserCreated] = useState(false);
   const [error, setError] = useState(false);
 
   async function handleFormSubmit(e) {
     e.preventDefault();
-    setCreatingUser(true);
+    SetLoginInProgress(true);
     setUserCreated(false);
     setError(false);
 
-    const res = await fetch("/api/register", {
+    const res = await fetch("/api/login", {
       method: "POST",
       body: JSON.stringify({ email, password }),
       headers: { "Content-Type": "application/json" },
@@ -26,13 +26,13 @@ function RegisterPage() {
     } else {
       setError(true);
     }
-    setCreatingUser(false);
+    SetLoginInProgress(false);
   }
   return (
     <div className="min-h-[65vh]">
       <div className="mt-20">
         <h1 className="text-3xl font-semibold text-center text-orange-500 ">
-          Register
+          Login
         </h1>
         {userCreated && (
           <>
@@ -65,29 +65,29 @@ function RegisterPage() {
             placeholder="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            disabled={creatingUser}
+            disabled={LoginInProgress}
           />
           <input
             type="password"
             placeholder="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            disabled={creatingUser}
+            disabled={LoginInProgress}
           />
-          <button disabled={creatingUser} type="submit">
-            Register
+          <button disabled={LoginInProgress} type="submit">
+            Login
           </button>
           <div className="my-4 text-center text-gray-500">
             or login with provider
           </div>
-          <button disabled={creatingUser} className="flex gap-4 justify-center">
+          <button disabled={LoginInProgress} className="flex gap-4 justify-center">
             <Image src={"/google.png"} alt={""} width={24} height={24} />
             Login with google
           </button>
           <div className="text-center my-4 text-gray-500 border-t pt-4">
-            Existing account?{" "}
-            <Link className="underline" href={"/login"}>
-              Login here &raquo;
+            Not a User?{" "}
+            <Link className="underline" href={"/register"}>
+              Register here &raquo;
             </Link>
           </div>
         </form>
@@ -96,4 +96,4 @@ function RegisterPage() {
   );
 }
 
-export default RegisterPage;
+export default LoginPage;
