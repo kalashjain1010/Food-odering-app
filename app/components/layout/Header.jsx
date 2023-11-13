@@ -13,9 +13,9 @@ function Header() {
         <Link href={"/"}>Menu</Link>
         <Link href={"/"}>Contact</Link>
       </div>
-      <div className="flex">
+      <div className="flex gap-x-2">
         <Link href={"/login"}>
-          <button className="px-4 py-1 font-semibold">
+          <button className="px-4 py-1 font-semibold ">
             Login
           </button>
         </Link>
