@@ -2,6 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
+import {signIn} from "next-auth/react";
 
 function LoginPage() {
   const [email, setEmail] = useState("");
@@ -16,16 +17,8 @@ function LoginPage() {
     setUserCreated(false);
     setError(false);
 
-    const res = await fetch("/api/login", {
-      method: "POST",
-      body: JSON.stringify({ email, password }),
-      headers: { "Content-Type": "application/json" },
-    });
-    if (res.ok) {
-      setUserCreated(true);
-    } else {
-      setError(true);
-    }
+    await signIn('credentials', {email,password})
+  
     SetLoginInProgress(false);
   }
   return (
@@ -34,27 +27,6 @@ function LoginPage() {
         <h1 className="text-3xl font-semibold text-center text-orange-500 ">
           Login
         </h1>
-        {userCreated && (
-          <>
-            <div className="text-center mt-4">
-              <div className="text-green-700">User created</div>
-              <div>
-                Now you can{" "}
-                <Link className="italic underline" href={"./login"}>
-                  Login &raquo;{" "}
-                </Link>
-              </div>
-            </div>
-          </>
-        )}
-        {error && (
-          <>
-            <div className="text-center text-red-500 text-2xl mt-4">
-              Error <br />
-              please try again
-            </div>
-          </>
-        )}
 
         <form
           className="block mt-5 max-w-xs mx-auto"
