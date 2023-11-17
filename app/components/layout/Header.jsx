@@ -5,8 +5,14 @@ import React from "react";
 
 function Header() {
   const session = useSession();
-  // console.log(session);
   const status = session.status;
+  console.log(session.status);
+  const userData = session.data?.user
+  let userName =  userData?.name || userData?.email
+
+  if (userName && userName.includes(' ')) {
+    userName = userName.split(' ')[0];
+  }
   return (
     <div className="flex justify-between items-center">
       <div className="text-orange-500 font-semibold text-2xl">
@@ -21,7 +27,13 @@ function Header() {
       <div className="flex gap-x-2">
         {status === "authenticated" && (
           <>
-            <button onClick={()=> signOut()} className="px-4 py-1  bg-orange-500 rounded-full text-white font-semibold">
+            <Link href={"/profile"}>
+              <button className="px-4 py-1 font-semibold border-0 flex flex-nowrap whitespace-nowrap">hello, {userName}</button>
+            </Link>
+            <button
+              onClick={() => signOut()}
+              className="px-4 py-1  bg-orange-500 rounded-full text-white font-semibold"
+            >
               Logout
             </button>
           </>

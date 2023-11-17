@@ -1,71 +1,56 @@
 "use client";
+import { signIn } from "next-auth/react";
 import Image from "next/image";
-import Link from "next/link";
-import React, { useState } from "react";
-import {signIn} from "next-auth/react";
+import { useState } from "react";
 
-function LoginPage() {
+export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [LoginInProgress, SetLoginInProgress] = useState(false);
-  const [userCreated, setUserCreated] = useState(false);
-  const [error, setError] = useState(false);
+  const [loginInProgress, setLoginInProgress] = useState(false);
 
-  async function handleFormSubmit(e) {
-    e.preventDefault();
-    SetLoginInProgress(true);
-    setUserCreated(false);
-    setError(false);
+  async function handleFormSubmit(ev) {
+    ev.preventDefault();
+    setLoginInProgress(true);
 
-    await signIn('credentials', {email,password})
-  
-    SetLoginInProgress(false);
+    await signIn("credentials", { email, password, });
+
+    setLoginInProgress(false);
   }
   return (
-    <div className="min-h-[65vh]">
-      <div className="mt-20">
-        <h1 className="text-3xl font-semibold text-center text-orange-500 ">
+    <section className="mt-8">
+      <h1 className="text-center text-primary text-4xl mb-4">Login</h1>
+      <form className="max-w-xs mx-auto" onSubmit={handleFormSubmit}>
+        <input
+          type="email"
+          name="email"
+          placeholder="email"
+          value={email}
+          disabled={loginInProgress}
+          onChange={(ev) => setEmail(ev.target.value)}
+        />
+        <input
+          type="password"
+          name="password"
+          placeholder="password"
+          value={password}
+          disabled={loginInProgress}
+          onChange={(ev) => setPassword(ev.target.value)}
+        />
+        <button disabled={loginInProgress} type="submit">
           Login
-        </h1>
-
-        <form
-          className="block mt-5 max-w-xs mx-auto"
-          onSubmit={handleFormSubmit}
+        </button>
+        <div className="my-4 text-center text-gray-500">
+          or login with provider
+        </div>
+        <button
+          type="button"
+          onClick={() => signIn("google", { callbackUrl: "/" })}
+          className="flex gap-4 justify-center"
         >
-          <input
-            type="email"
-            placeholder="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            disabled={LoginInProgress}
-          />
-          <input
-            type="password"
-            placeholder="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            disabled={LoginInProgress}
-          />
-          <button disabled={LoginInProgress} type="submit">
-            Login
-          </button>
-          <div className="my-4 text-center text-gray-500">
-            or login with provider
-          </div>
-          <button disabled={LoginInProgress} className="flex gap-4 justify-center">
-            <Image src={"/google.png"} alt={""} width={24} height={24} />
-            Login with google
-          </button>
-          <div className="text-center my-4 text-gray-500 border-t pt-4">
-            Not a User?{" "}
-            <Link className="underline" href={"/register"}>
-              Register here &raquo;
-            </Link>
-          </div>
-        </form>
-      </div>
-    </div>
+          <Image src={"/google.png"} alt={""} width={24} height={24} />
+          Login with google
+        </button>
+      </form>
+    </section>
   );
 }
-
-export default LoginPage;
