@@ -1,21 +1,28 @@
 "use client";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import Image from "next/image";
+import { redirect } from "next/navigation";
 import { useState } from "react";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loginInProgress, setLoginInProgress] = useState(false);
-
+  const session = useSession()
+  const {status} = session;
   async function handleFormSubmit(ev) {
     ev.preventDefault();
     setLoginInProgress(true);
 
-    await signIn("credentials", { email, password, });
+    await signIn("credentials", { email, password,callbackUrl:'/' });
 
     setLoginInProgress(false);
   }
+
+  if(status === "authenticated" ){
+    return redirect('/')
+  }
+
   return (
     <section className="mt-8">
       <h1 className="text-center text-primary text-4xl mb-4">Login</h1>
