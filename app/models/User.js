@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 
 const UserSchema = new Schema(
   {
+    name: { type: String },
     email: {
       type: String,
       required: true,
@@ -11,10 +12,7 @@ const UserSchema = new Schema(
     password: {
       type: String,
       required: true,
-      validate: {
-        validator: (pass) => pass.length >= 8,
-        message: "Password must be at least 8 characters long",
-      },
+   
     },
   },
   { timestamps: true }
